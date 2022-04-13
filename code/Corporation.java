@@ -62,6 +62,7 @@ public class Corporation extends Entity {
         g2d.drawString(String.format("%s", this.cash), position.getIntX()+20, position.getIntY()+100+50);
         // stockname
         g2d.setColor(Color.BLACK);
+
         g2d.drawString(String.format("%s", this.stockName), position.getIntX()+20, position.getIntY()-9);
             this.position.setX(this.position.getX() + (this.state.destination.getX()-this.position.getX())/60);
             this.position.setY(this.position.getY() + (this.state.destination.getY()-this.position.getY())/60);
