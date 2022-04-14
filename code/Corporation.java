@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.util.concurrent.ThreadLocalRandom;
 import java.io.File;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 
@@ -14,6 +15,7 @@ public class Corporation extends Entity {
     private String name, stockName;
     private BufferedImage image;
     private final Font font = new Font("Verdana", Font.BOLD, 16);
+
 
     // to generate new badge each time awarded.
     private enum Badge {
@@ -29,12 +31,12 @@ public class Corporation extends Entity {
         this.name=name;
         this.cash=0;
         this.stockName = stockName;
-        int randomState = (int) ((Math.random() * (3 - 0)) + 0);
+        int randomState = 1;
         // since state is given abstract and adding a class to HW is forbidden,
         // i cannot create a factory to generate state objects by invoking
         // generate methods of corresponding factories but rather mess with ifs.
-        if(randomState==0) this.state = new Rest(randomState);
-        if(randomState==1) this.state = new Shake(randomState);
+        if(randomState==0) this.state = new Rest(randomState, this.position.getX(), this.position.getY());
+        if(randomState==1) this.state = new Shake(randomState, this.position.getX(), this.position.getY());
         if(randomState==2) this.state = new GotoXY(randomState);
         if(randomState==3) this.state = new ChaseClosest(randomState);
         System.out.println("Position Corporation-" + name + " " + position.getIntX() + "," + position.getIntY() );
@@ -64,21 +66,46 @@ public class Corporation extends Entity {
         g2d.setColor(Color.BLACK);
 
         g2d.drawString(String.format("%s", this.stockName), position.getIntX()+20, position.getIntY()-9);
-            this.position.setX(this.position.getX() + (this.state.destination.getX()-this.position.getX())/60);
-            this.position.setY(this.position.getY() + (this.state.destination.getY()-this.position.getY())/60);
     }
 
     @Override
     public void step() {
-        // destroy previous state to prevent memleak by notifying GC
-        this.state = null;
-        int randomState = (int) ((Math.random() * (3 - 0)) + 0);
-        // since state is given abstract and adding a class to HW is forbidden,
-        // i cannot create a factory to generate state objects by invoking
-        // generate methods of corresponding factories but rather mess with ifs.
-        if(randomState==0) this.state = new Rest(randomState);
-        if(randomState==1) this.state = new Shake(randomState);
-        if(randomState==2) this.state = new GotoXY(randomState);
-        if(randomState==3) this.state = new ChaseClosest(randomState);
+
+        this.state.lifeTime++;
+        /*
+        if(this.state.lifeTime==this.state.stateCounter){
+            this.state.lifeTime=0;
+            int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
+            if (randomState != this.state.currentState) {
+                // destroy previous state to prevent memleak by notifying GC
+                this.state = null;
+
+                // since state is given abstract and adding a class to HW is forbidden,
+                // i cannot create a factory to generate state objects by invoking
+                // generate methods of corresponding factories but rather mess with ifs.
+                if (randomState == 0) this.state = new Rest(randomState, this.position.getX(), this.position.getY());
+                if (randomState == 1) this.state = new Shake(randomState, this.position.getX(), this.position.getY());
+                if (randomState == 2) this.state = new GotoXY(randomState);
+                if (randomState == 3) this.state = new ChaseClosest(randomState);
+            }
+        }
+
+        else{
+        */
+
+            // shake, goto , chase, even rest have a destination (identical to its own position for rest case.)
+            if(this.state.destination.getIntX()==this.position.getIntX() && this.position.getIntY()==this.state.destination.getIntY()){
+                System.out.println("Reached to dest." +  this.state.currentState);
+
+                // use down casting to invoke shake method after reaching dest.
+                if(this.state.getState()==1){
+                    ((Shake) this.state).setNewDestination(this.position.getX(), this.position.getY());
+                    System.out.println("Next Position for Shake: " + this.state.destination.getIntX() + "," + this.state.destination.getIntY() );
+
+                }
+            }
+            this.position.setX(this.position.getX() + (this.state.destination.getX()-this.position.getX())/2);
+            this.position.setY(this.position.getY() + (this.state.destination.getY()-this.position.getY())/2);
+       // }
     }
 }

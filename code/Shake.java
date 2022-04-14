@@ -1,10 +1,21 @@
 public class Shake extends State {
-    Shake(int currentState) {
+    Shake(int currentState, double x, double y) {
         super(currentState, "Shake");
         this.destination = new Position(0,0);
-        this.destination.setX( (double) (Math.random() * (20 - 3) + 3));
-        // consider countries positioned at 3/5 of the height. do not pass them below.
-        this.destination.setY( (double) (Math.random() * (20-3) + 3) );
+        setNewDestination(x,y);
+        this.speed=  30;
+    }
+
+    public void setNewDestination(double x, double y){
+        double change = Common.getRandomGenerator().nextDouble() * 5 + 2;
+        change = Common.getRandomGenerator().nextBoolean() ? change :  -change;
+        this.destination.setX(x + change);
+        System.out.println("X set to: " +  this.destination.getX() );
+        change = Common.getRandomGenerator().nextDouble() * 5 + 2;
+        change = Common.getRandomGenerator().nextBoolean() ? change : -change;
+        this.destination.setY(y + change );
+        System.out.println("Y set to: " +  this.destination.getY() );
+        this.speed= 30;
     }
 
     // TODO

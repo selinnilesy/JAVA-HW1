@@ -1,6 +1,7 @@
 public class Rest extends State {
-    Rest(int currentState) {
+    Rest(int currentState, double x, double y) {
         super(currentState, "Rest");
+        this.destination = new Position(x,y);
     }
 
     // TODO

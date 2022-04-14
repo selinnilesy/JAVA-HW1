@@ -62,9 +62,19 @@ public class Common {
         if (randomGenerator.nextInt(200) == 0) foodPrice.step();
         if (randomGenerator.nextInt(300) == 0) electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0) goldPrice.step();
-        if (randomGenerator.nextInt(500) == 0) Chile.step();
-        if (randomGenerator.nextInt(600) == 0) Malaysia.step();
-        if (randomGenerator.nextInt(700) == 0) Mexico.step();
+
+        Mexico.step();
+        Chile.step();
+        Nigeria.step();
+        Poland.step();
+        Malaysia.step();
+
+        boeing.step();
+        general_dynamics.step();
+        lockheed_martin.step();
+        northrop_grumman.step();
+        raytheon.step();
+        System.out.println("Step call: " );
 
         // TODO: call other entities' step()
     }

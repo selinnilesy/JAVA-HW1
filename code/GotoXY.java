@@ -1,10 +1,15 @@
 public class GotoXY extends State {
+    private double speed;
     GotoXY(int currentState) {
         super(currentState, "GotoXY");
         this.destination = new Position(0,0);
-        this.destination.setX((double) ((Math.random() * (Common.windowWidth-100 - 0)) + 0));
+        double change = Common.getRandomGenerator().nextDouble() * (Common.windowWidth-100);
+        this.destination.setX(change);
         // consider countries positioned at 3/5 of the height. do not pass them below.
-        this.destination.setY(((double) ((Math.random() * (Common.getWindowHeight()*3/5 - Common.horizontalLineY)) + Common.horizontalLineY)));
+        change = Common.getRandomGenerator().nextDouble() * ((Common.getWindowHeight()*3/5) - Common.horizontalLineY) + Common.horizontalLineY;
+        this.destination.setY( change );
+        this.speed= (int) (Common.getRandomGenerator().nextDouble() * (20) + 20);
+        System.out.println("Speed of state gotoxy: %s" + speed);
     }
 
     // TODO
