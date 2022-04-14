@@ -31,7 +31,7 @@ public class Corporation extends Entity {
         this.name=name;
         this.cash=0;
         this.stockName = stockName;
-        int randomState = 1;
+        int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
         // since state is given abstract and adding a class to HW is forbidden,
         // i cannot create a factory to generate state objects by invoking
         // generate methods of corresponding factories but rather mess with ifs.
@@ -96,12 +96,14 @@ public class Corporation extends Entity {
             // shake, goto , chase, even rest have a destination (identical to its own position for rest case.)
             if(this.state.destination.getIntX()==this.position.getIntX() && this.position.getIntY()==this.state.destination.getIntY()){
                 System.out.println("Reached to dest." +  this.state.currentState);
-
                 // use down casting to invoke shake method after reaching dest.
                 if(this.state.getState()==1){
                     ((Shake) this.state).setNewDestination(this.position.getX(), this.position.getY());
                     System.out.println("Next Position for Shake: " + this.state.destination.getIntX() + "," + this.state.destination.getIntY() );
-
+                }
+                else if(this.state.getState()==2){
+                    ((GotoXY) this.state).setNewDestination();
+                    System.out.println("Next Position for GotoXY: " + this.state.destination.getIntX() + "," + this.state.destination.getIntY() );
                 }
             }
             this.position.setX(this.position.getX() + (this.state.destination.getX()-this.position.getX())/2);

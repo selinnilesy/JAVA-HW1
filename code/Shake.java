@@ -6,6 +6,7 @@ public class Shake extends State {
         this.speed=  30;
     }
 
+    @Override
     public void setNewDestination(double x, double y){
         double change = Common.getRandomGenerator().nextDouble() * 5 + 2;
         change = Common.getRandomGenerator().nextBoolean() ? change :  -change;
@@ -17,6 +18,9 @@ public class Shake extends State {
         System.out.println("Y set to: " +  this.destination.getY() );
         this.speed= 30;
     }
+    @Override
+    public void setNewDestination(){}
+
 
     // TODO
     @Override

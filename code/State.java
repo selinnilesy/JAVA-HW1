@@ -17,4 +17,6 @@ public abstract class State {
     }
     public int getState(){ return this.currentState;}
     public abstract void move();
+    public abstract void setNewDestination(double x, double y);
+    public abstract void setNewDestination();
 }
