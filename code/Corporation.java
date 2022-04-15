@@ -48,7 +48,7 @@ public class Corporation extends Entity {
     public void draw(Graphics2D g2d) {
         try{
             image = new BufferedImage(100,100, TYPE_INT_RGB);
-            image = ImageIO.read( new File(System.getProperty("user.dir") + "/images/" + this.name + ".png"));
+            image = ImageIO.read( new File(System.getProperty("user.dir") + "/../images/" + this.name + ".png"));
         }
         catch(Exception e){
             System.out.println("image cannot be read. " );

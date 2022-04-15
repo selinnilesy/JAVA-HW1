@@ -38,10 +38,11 @@ public class Country extends Entity {
     public void draw(Graphics2D g2d) {
         try{
             image = new BufferedImage(150,150, TYPE_INT_RGB);
-            image = ImageIO.read( new File(System.getProperty("user.dir") + "/images/" + this.name + ".png"));
+            image = ImageIO.read( new File(System.getProperty("user.dir") + "/../images/" + this.name + ".png"));
         }
+
         catch(Exception e){
-            System.out.println("image cannot be read. " );
+            System.out.println(System.getProperty("user.dir") + "../images/" + this.name + ".png" + "image cannot be read. " );
         }
         //System.out.println("image width: " + image.getWidth(null));
         g2d.drawImage(image, this.position.getIntX(), this.position.getIntY(), 150, 150, null);
