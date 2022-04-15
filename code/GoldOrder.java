@@ -8,9 +8,7 @@ public abstract class GoldOrder extends Order {
     @Override
     public abstract void step() ;
 
-    @Override
-    public abstract void nanana();
-
-    public abstract void goldgoldgold();
+    public abstract void buygold();
+    public abstract void sellgold();
 
 }

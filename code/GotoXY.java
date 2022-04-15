@@ -3,13 +3,16 @@ public class GotoXY extends State {
     GotoXY(int currentState) {
         super(currentState, "GotoXY");
         this.destination = new Position(0,0);
-        setNewDestination( );
+        // arguments not needed this time, therefore 0. wanted to use function overload but
+        // state type cannot be known by the corportation, which has an abstract view of
+        // state
+        setNewDestination(0,0 );
         this.speed= (int) (Common.getRandomGenerator().nextDouble() * (20) + 20);
         System.out.println("Speed of state gotoxy: %s" + speed);
     }
 
     @Override
-    public void setNewDestination(){
+    public void setNewDestination(double x, double y){
         double change = Common.getRandomGenerator().nextDouble() * (Common.windowWidth-100);
         this.destination.setX(change);
         // consider countries positioned at 3/5 of the height. do not pass them below.
@@ -17,12 +20,5 @@ public class GotoXY extends State {
         this.destination.setY( change );
         this.speed= (int) (Common.getRandomGenerator().nextDouble() * (20) + 20);
     }
-    @Override
-    public void setNewDestination(double x, double y){}
 
-    // TODO
-    @Override
-    public void move(){
-
-    }
 }

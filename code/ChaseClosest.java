@@ -9,11 +9,4 @@ public class ChaseClosest extends State {
     // TODO
     @Override
     public void setNewDestination(double x, double y){}
-    @Override
-    public void setNewDestination(){}
-
-    @Override
-    public void move(){
-
-    }
 }

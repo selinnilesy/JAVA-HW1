@@ -10,8 +10,7 @@ public class SellGoldOrder extends GoldOrder {
     public  void step(){}
 
     @Override
-    public  void nanana(){}
-
+    public  void sellgold(){}
     @Override
-    public  void goldgoldgold(){}
+    public  void buygold(){}
 }

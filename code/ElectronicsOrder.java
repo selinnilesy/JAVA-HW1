@@ -13,8 +13,4 @@ public class ElectronicsOrder extends Order {
 
     }
 
-    @Override
-    public void nanana(){
-
-    }
 }

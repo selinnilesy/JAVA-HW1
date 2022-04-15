@@ -13,8 +13,4 @@ public class FoodOrder extends Order {
 
     }
 
-    @Override
-    public void nanana(){
-
-    }
 }

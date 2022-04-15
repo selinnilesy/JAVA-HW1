@@ -11,6 +11,7 @@ public class Corporation extends Entity {
     // Cash RGB --> (180, 0, 0)
     // Badge is 20 x 20
     private int cash;
+    // has relationship with state.
     private State state;
     private String name, stockName;
     private BufferedImage image;
@@ -94,20 +95,22 @@ public class Corporation extends Entity {
         */
 
             // shake, goto , chase, even rest have a destination (identical to its own position for rest case.)
-            if(this.state.destination.getIntX()==this.position.getIntX() && this.position.getIntY()==this.state.destination.getIntY()){
-                System.out.println("Reached to dest." +  this.state.currentState);
-                // use down casting to invoke shake method after reaching dest.
-                if(this.state.getState()==1){
-                    ((Shake) this.state).setNewDestination(this.position.getX(), this.position.getY());
-                    System.out.println("Next Position for Shake: " + this.state.destination.getIntX() + "," + this.state.destination.getIntY() );
-                }
-                else if(this.state.getState()==2){
-                    ((GotoXY) this.state).setNewDestination();
-                    System.out.println("Next Position for GotoXY: " + this.state.destination.getIntX() + "," + this.state.destination.getIntY() );
-                }
+            if(this.state.destinationReached(this.position)){
+                     (this.state).setNewDestination(this.position.getX(), this.position.getY());
             }
-            this.position.setX(this.position.getX() + (this.state.destination.getX()-this.position.getX())/2);
-            this.position.setY(this.position.getY() + (this.state.destination.getY()-this.position.getY())/2);
+            double normalized_disposition_x, normalized_disposition_y;
+            normalized_disposition_x=normalized_disposition_y=0.0;
+
+            double disposition_x = this.state.destination.getX()-this.position.getX();
+            double disposition_y = this.state.destination.getY()-this.position.getY();
+            System.out.println("disposition_x disposition_y for current state: " +this.state.currentState + " " + disposition_x + "," + disposition_y );
+            if(disposition_x!=0 && disposition_y!=0){
+                double sqrt = Math.sqrt(disposition_x * disposition_x + disposition_y * disposition_y);
+                normalized_disposition_x = (disposition_x/ sqrt);
+                normalized_disposition_y = (disposition_y/ sqrt);
+            }
+            this.position.setX(this.position.getX() + (normalized_disposition_x * this.state.speed));
+            this.position.setY(this.position.getY() + (normalized_disposition_y * this.state.speed));
        // }
     }
 }

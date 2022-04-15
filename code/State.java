@@ -16,7 +16,10 @@ public abstract class State {
         this.speed=1;
     }
     public int getState(){ return this.currentState;}
-    public abstract void move();
     public abstract void setNewDestination(double x, double y);
-    public abstract void setNewDestination();
+    public boolean destinationReached(Position position){
+        if (Math.abs(this.destination.getX()-position.getX())<0.5 && Math.abs(position.getY()-this.destination.getY())<0.5)
+            return true;
+        return false;
+    }
 }

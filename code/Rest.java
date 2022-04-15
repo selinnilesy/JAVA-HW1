@@ -7,12 +7,7 @@ public class Rest extends State {
     // TODO
     @Override
     public void setNewDestination(double x, double y){
-
-    }
-    @Override
-    public void setNewDestination(){}
-    @Override
-    public void move(){
-
+        this.destination.setX(x);
+        this.destination.setY(y);
     }
 }
