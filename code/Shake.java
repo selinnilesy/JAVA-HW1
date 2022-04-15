@@ -8,11 +8,11 @@ public class Shake extends State {
 
     @Override
     public void setNewDestination(double x, double y){
-        double change = Common.getRandomGenerator().nextDouble() * 5 + 2;
+        double change = Common.getRandomGenerator().nextDouble() * 1 + 2;
         change = Common.getRandomGenerator().nextBoolean() ? change :  -change;
         this.destination.setX(x + change);
         System.out.println("X set to: " +  this.destination.getX() );
-        change = Common.getRandomGenerator().nextDouble() * 5 + 2;
+        change = Common.getRandomGenerator().nextDouble() * 1 + 2;
         change = Common.getRandomGenerator().nextBoolean() ? change : -change;
         this.destination.setY(y + change );
         System.out.println("Y set to: " +  this.destination.getY() );
