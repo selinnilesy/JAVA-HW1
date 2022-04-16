@@ -101,6 +101,6 @@ public class Corporation extends Entity {
                      (this.state).setNewDestination(this.position.getX(), this.position.getY());
             }
             // move content of corporation (entity) object on gui based on speed and relative distance.
-            Common.moveContent(this, this.position, this.state.destination, this.state.speed);
+            Common.moveContent(this, this.position, this.state.destination, this.state.getSpeed());
     }
 }

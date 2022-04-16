@@ -4,7 +4,7 @@ public abstract class State {
     // TODO
     // Rest(0), Shake(1), GotoXY(2), ChaseClosest(3);
     private int currentState;
-    public int speed;
+    protected int speed;
     protected Position destination;
     protected final String name;
     public int stateCounter, lifeTime;
@@ -17,5 +17,6 @@ public abstract class State {
         this.speed=1;
     }
     public int getState(){ return this.currentState;}
+    public int getSpeed(){ return this.speed;}
     public abstract void setNewDestination(double x, double y);
 }
