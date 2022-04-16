@@ -18,9 +18,11 @@ public class Country extends Entity {
     // Happiness RGB --> (180, 0, 0)
     private int worth, cash, gold;
     private double happiness;
-    private String name, label;
+    public String name, label;
     private BufferedImage image = null;
-    // has relationship with orders.
+    // this is a 2-way has-relationship between country and orders.
+    // even if the order is destructed later on, its country field's reference
+    // will be kept in Common and country object will not be destroyed prematurely.
     private List<Order> orders = null;
     private final Color nameColor = new Color(0, 0, 0);
     private final Color worthColor = new Color(0, 0, 255);
@@ -82,15 +84,15 @@ public class Country extends Entity {
             Order order = null;
             boolean buy = Common.getRandomGenerator().nextBoolean();
             if (buy) {
-                order = new BuyGoldOrder(this.position, this.label);
+                order = new BuyGoldOrder( this);
             } else {
-                order = new SellGoldOrder(this.position, this.label);
+                order = new SellGoldOrder( this);
             }
             orders.add(order);
 
             if(happiness < 50.0){
-                Order otherOrder  = new FoodOrder(this.position, this.label);
-                Order anotherOrder  = new ElectronicsOrder(this.position, this.label);
+                Order otherOrder  = new FoodOrder( this);
+                Order anotherOrder  = new ElectronicsOrder( this);
                 orders.add(otherOrder);
                 orders.add(anotherOrder);
             }
@@ -100,6 +102,8 @@ public class Country extends Entity {
             x.step();
             if(x.position.getY() < Common.horizontalLineY) {
                 orders.remove(x);
+                // execute order.
+                x.execute();
                 // destroy object
                 x=null;
                 // decrement loop counter
@@ -107,4 +111,11 @@ public class Country extends Entity {
             }
         }
     }
+    // only country class edit its below fields.
+    // this indicates only orders (which has countries)
+    // edit these fields amongst other classes.
+    public void changeHappiness(double x) {this.happiness+=x;}
+    public void changeCash(int x) {this.cash+=x;}
+    public void changeGold(int x) {this.gold+=x;}
+    public void changeWorth(int x) {this.worth+=x;}
 }
