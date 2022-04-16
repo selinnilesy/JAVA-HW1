@@ -3,7 +3,8 @@ import java.awt.*;
 public abstract class State {
     // TODO
     // Rest(0), Shake(1), GotoXY(2), ChaseClosest(3);
-    public int currentState, speed;
+    private int currentState;
+    public int speed;
     protected Position destination;
     protected final String name;
     public int stateCounter, lifeTime;
@@ -17,9 +18,4 @@ public abstract class State {
     }
     public int getState(){ return this.currentState;}
     public abstract void setNewDestination(double x, double y);
-    public boolean destinationReached(Position position){
-        if (Math.abs(this.destination.getX()-position.getX())<0.5 && Math.abs(position.getY()-this.destination.getY())<0.5)
-            return true;
-        return false;
-    }
 }

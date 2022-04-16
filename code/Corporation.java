@@ -32,7 +32,7 @@ public class Corporation extends Entity {
         this.name=name;
         this.cash=0;
         this.stockName = stockName;
-        int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
+        int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
         // since state is given abstract and adding a class to HW is forbidden,
         // i cannot create a factory to generate state objects by invoking
         // generate methods of corresponding factories but rather mess with ifs.
@@ -94,23 +94,13 @@ public class Corporation extends Entity {
         else{
         */
 
-            // shake, goto , chase, even rest have a destination (identical to its own position for rest case.)
-            if(this.state.destinationReached(this.position)){
+            // shake, goto , chase, even rest have a destination.
+            // for the rest case, it is set equal to its own position.
+            // if state is smth else like goto, chase it is set accordingly in the state class.
+            if(Common.destinationReached(this.position, this.state.destination)){
                      (this.state).setNewDestination(this.position.getX(), this.position.getY());
             }
-            double normalized_disposition_x, normalized_disposition_y;
-            normalized_disposition_x=normalized_disposition_y=0.0;
-
-            double disposition_x = this.state.destination.getX()-this.position.getX();
-            double disposition_y = this.state.destination.getY()-this.position.getY();
-            System.out.println("disposition_x disposition_y for current state: " +this.state.currentState + " " + disposition_x + "," + disposition_y );
-            if(disposition_x!=0 && disposition_y!=0){
-                double sqrt = Math.sqrt(disposition_x * disposition_x + disposition_y * disposition_y);
-                normalized_disposition_x = (disposition_x/ sqrt);
-                normalized_disposition_y = (disposition_y/ sqrt);
-            }
-            this.position.setX(this.position.getX() + (normalized_disposition_x * this.state.speed));
-            this.position.setY(this.position.getY() + (normalized_disposition_y * this.state.speed));
-       // }
+            // move content of corporation (entity) object on gui based on speed and relative distance.
+            Common.moveContent(this, this.position, this.state.destination, this.state.speed);
     }
 }
