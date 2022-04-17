@@ -84,22 +84,25 @@ public class Country extends Entity {
     public void step() {
         // do not generate orders at an extreme rate. lower the chance to keep it slow
         // that is comfortable for eye-cathcing.
-        if(Common.getRandomGenerator().nextDouble() > 0.99) {
+        if(Common.getRandomGenerator().nextDouble() > 0.95) {
             Order order = null;
-            boolean buy = Common.getRandomGenerator().nextBoolean();
-            if (buy) {
-                order = new BuyGoldOrder( this);
-            } else {
-                order = new SellGoldOrder( this);
+            if(happiness < 50.0){
+                // to generate food and electronics more likely
+                int randomOrderType = Common.getRandomGenerator().nextInt(0,6);
+                if(randomOrderType==0) order = new BuyGoldOrder( this);
+                else if(randomOrderType==1) order = new SellGoldOrder( this);
+                else if(randomOrderType>1 && randomOrderType<4 ) order = new FoodOrder( this);
+                else if(randomOrderType>3) order = new ElectronicsOrder( this);
+            }
+            else{
+                boolean buy = Common.getRandomGenerator().nextBoolean();
+                if (buy) {
+                    order = new BuyGoldOrder( this);
+                } else {
+                    order = new SellGoldOrder( this);
+                }
             }
             orders.add(order);
-
-            if(happiness < 50.0){
-                Order otherOrder  = new FoodOrder( this);
-                Order anotherOrder  = new ElectronicsOrder( this);
-                orders.add(otherOrder);
-                orders.add(anotherOrder);
-            }
         }
         // if an order is already caught while stepping corporations, corporation state handle it
         // and invoke this class to discard its position in the orders array.
@@ -134,8 +137,8 @@ public class Country extends Entity {
     // this indicates only orders (which has countries)
     // edit these fields amongst other classes.
     public void changeHappiness(double x) {this.happiness+=x;}
-    public void changeCash(int x) {this.cash+=x;}
-    public void changeGold(int x) {this.gold+=x;}
-    public void changeWorth(int x) {this.worth+=x;}
+    public void changeCash(int x) {this.cash+=x; updateWorth();}
+    public void changeGold(int x) {this.gold+=x; updateWorth();}
+    public void updateWorth() {this.worth=(int) (this.cash+this.gold*Common.getGoldPrice().getCurrentPrice());}
     public List<Order> getOrders() {return this.orders;}
 }

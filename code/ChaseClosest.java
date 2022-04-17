@@ -3,7 +3,7 @@ import java.util.List;
 public class ChaseClosest extends State {
     private Order closestOrder;
     ChaseClosest(int currentState, Corporation corpo) {
-        super(currentState, "ChaseClosest", corpo);
+        super(currentState, "Chase", corpo);
         // chase closest has a destination identical to corporation's position
         this.destination = new Position(corpo.getPosition().getX(), corpo.getPosition().getY());
         setNewDestination( this.destination.getX(),  this.destination.getY());

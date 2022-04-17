@@ -68,22 +68,22 @@ public class Corporation extends Entity {
         g2d.drawString(String.format("%s", this.cash), position.getIntX()+20, position.getIntY()+100+50);
         // stockname
         g2d.setColor(Color.BLACK);
-        g2d.drawString(String.format("%s", this.stockName), position.getIntX()+20, position.getIntY()-9);
+        g2d.drawString(String.format("%s", this.stockName), position.getIntX()+30, position.getIntY()-5);
         // badges
         if(this.whiteBadge){
             g2d.setColor(Color.WHITE);
-            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
-            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.drawRect(position.getIntX()+5, position.getIntY()-40, 20,20);
+            g2d.fillRect(position.getIntX()+5, position.getIntY()-40, 20,20);
         }
         if(this.yellowBadge){
             g2d.setColor(Color.YELLOW);
-            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
-            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.drawRect(position.getIntX()+30, position.getIntY()-40, 20,20);
+            g2d.fillRect(position.getIntX()+30, position.getIntY()-40, 20,20);
         }
         if(this.redBadge){
             g2d.setColor(Color.RED);
-            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
-            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.drawRect(position.getIntX()+55, position.getIntY()-40, 20,20);
+            g2d.fillRect(position.getIntX()+55, position.getIntY()-40, 20,20);
         }
     }
 
