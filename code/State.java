@@ -7,16 +7,18 @@ public abstract class State {
     protected int speed;
     protected Position destination;
     protected final String name;
+    protected Corporation corporation;
     public int stateCounter, lifeTime;
     protected static Color stateColor = new Color(0, 0, 255);
-    State(int currentState, String name) {
+    State(int currentState, String name, Corporation corpo) {
         this.currentState = currentState;
         this.name = name;
+        this.corporation = corpo;
         this.stateCounter=(int) (Common.getRandomGenerator().nextDouble()*(100));
-        this.destination = null;
-        this.speed=1;
     }
-    public int getState(){ return this.currentState;}
     public int getSpeed(){ return this.speed;}
+    public Position getDestination(){ return this.destination;}
     public abstract void setNewDestination(double x, double y);
+
+    public abstract boolean destinationReached();
 }

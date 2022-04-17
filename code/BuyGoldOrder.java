@@ -15,4 +15,14 @@ public class BuyGoldOrder extends GoldOrder {
         country.changeGold(this.amount );
         country.changeCash((int) (-this.amount*Common.getGoldPrice().getCurrentPrice()));
     }
+
+    @Override
+    public void corporationInteraction(Corporation corp){
+        this.country.changeCash((int) (-this.amount*Common.getGoldPrice().getCurrentPrice()));
+        this.country.changeHappiness(-this.amount*0.1);
+        corp.changeCash((int) (this.amount*Common.getGoldPrice().getCurrentPrice()));
+        setBadgesToCorporation(corp);
+    }
+
+
 }

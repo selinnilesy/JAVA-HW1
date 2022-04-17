@@ -1,9 +1,8 @@
 public class Shake extends State {
-    Shake(int currentState, double x, double y) {
-        super(currentState, "Shake");
+    Shake(int currentState, Corporation corpo) {
+        super(currentState, "Shake", corpo);
         this.destination = new Position(0,0);
-        setNewDestination(x,y);
-        this.speed= (int) (Common.getRandomGenerator().nextDouble() * 2) + 1;
+        setNewDestination(corpo.getPosition().getX(),corpo.getPosition().getY());
     }
 
     @Override
@@ -15,5 +14,12 @@ public class Shake extends State {
         change = Common.getRandomGenerator().nextBoolean() ? change : -change;
         this.destination.setY(y + change );
         this.speed= (int) (Common.getRandomGenerator().nextDouble() * 2) + 1;
+    }
+
+    @Override
+    public boolean destinationReached() {
+        if (Math.abs(destination.getX()-corporation.getPosition().getX())<0.5 && Math.abs(corporation.getPosition().getY()-destination.getY())<0.5)
+            return true;
+        return false;
     }
 }

@@ -15,5 +15,9 @@ public class FoodOrder extends Order {
         country.changeHappiness(this.amount * 0.2);
         country.changeCash((int) (-this.amount*Common.getFoodPrice().getCurrentPrice()));
     }
+    @Override
+    public  boolean chasable(){
+        return false;
+    }
 
 }

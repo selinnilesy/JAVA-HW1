@@ -6,14 +6,21 @@ public abstract class GoldOrder extends Order {
     }
 
     // TODO
-    // i did not use gold order abstract class
-    // as i found many common things between all orders
-    // and implemented them in order.java.
-    // buy and sell orders only have different execute functionalites
-    // at hit time so they are implemented in their classes.
-    // therefore, this class got nothing special.
+
+    public abstract void corporationInteraction(Corporation corp);
+    public void setBadgesToCorporation(Corporation corp){
+        if(corp.getCash() > 2000) corp.setBadge(true, false, false);
+        if(corp.getCash() > 4000) corp.setBadge(true, true, false);
+        if(corp.getCash() > 6000) corp.setBadge(true, true, true);
+    }
 
     @Override
     public abstract void execute();
+
+    // is it fit for hunting? yes. other order types are not.
+    @Override
+    public  boolean chasable(){
+        return true;
+    }
 
 }

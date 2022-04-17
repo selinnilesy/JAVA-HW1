@@ -68,7 +68,7 @@ public class Country extends Entity {
         g2d.setColor(this.goldColor);
         g2d.drawString(String.format("Gold: %s", this.gold), position.getIntX(), position.getIntY()+150+120);
         g2d.setColor(this.happinessColor);
-        g2d.drawString(String.format("Happiness: %s%%", this.happiness), position.getIntX(), position.getIntY()+150+150);
+        g2d.drawString(String.format("Happiness: %.1f", this.happiness), position.getIntX(), position.getIntY()+150+150);
         // draw orders
         for(Order x : this.orders){
             x.draw(g2d);
@@ -76,11 +76,15 @@ public class Country extends Entity {
 
     }
 
+    public void removeOrder(Order x){
+        this.orders.remove(x);
+        System.out.println("Country: " + name + "destroyed its order as it is caught.");
+    }
     @Override
     public void step() {
         // do not generate orders at an extreme rate. lower the chance to keep it slow
         // that is comfortable for eye-cathcing.
-        if(Common.getRandomGenerator().nextDouble() > 0.85) {
+        if(Common.getRandomGenerator().nextDouble() > 0.99) {
             Order order = null;
             boolean buy = Common.getRandomGenerator().nextBoolean();
             if (buy) {
@@ -97,14 +101,29 @@ public class Country extends Entity {
                 orders.add(anotherOrder);
             }
         }
+        // if an order is already caught while stepping corporations, corporation state handle it
+        // and invoke this class to discard its position in the orders array.
+        // therefore, no need to double check here again.
         for (int i = 0; i < orders.size(); i++){
             Order x = orders.get(i);
             x.step();
             if(x.position.getY() < Common.horizontalLineY) {
+                System.out.println(" Order exceeded limit ");
                 orders.remove(x);
                 // execute order.
                 x.execute();
-                // destroy object
+                // if any corporation is chasing it, handle
+                for(Corporation corp : Common.getCorporations()){
+                    // here i deliberately check reference equality, not values.
+                    // if true, reference equality will yield
+                    // this order is being chased by this unknown state.
+                    if(corp.getState().getDestination()==x.getPosition()){
+                        // therefore, i use down casting.
+                        System.out.println(" and corporation is warned");
+                        ((ChaseClosest) corp.getState()).stopChasing(corp.getPosition());
+                    }
+                }
+                // destroy hit object
                 x=null;
                 // decrement loop counter
                 i--;
@@ -118,4 +137,5 @@ public class Country extends Entity {
     public void changeCash(int x) {this.cash+=x;}
     public void changeGold(int x) {this.gold+=x;}
     public void changeWorth(int x) {this.worth+=x;}
+    public List<Order> getOrders() {return this.orders;}
 }

@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,6 +17,7 @@ public class Corporation extends Entity {
     private State state;
     private String name, stockName;
     private BufferedImage image;
+    private boolean redBadge, whiteBadge, yellowBadge;
     private final Font font = new Font("Verdana", Font.BOLD, 16);
 
 
@@ -26,7 +29,7 @@ public class Corporation extends Entity {
             this.badgecolor = new Color(r,g,b);
         }
     }
-
+    public State getState(){return this.state;}
     public Corporation(String name, String stockName,  int initOrder){
         super(Common.getWindowWidth()*initOrder/7,Common.getWindowHeight()*1/5);
         this.name=name;
@@ -36,10 +39,10 @@ public class Corporation extends Entity {
         // since state is given abstract and adding a class to HW is forbidden,
         // i cannot create a factory to generate state objects by invoking
         // generate methods of corresponding factories but rather mess with ifs.
-        if(randomState==0) this.state = new Rest(randomState, this.position.getX(), this.position.getY());
-        if(randomState==1) this.state = new Shake(randomState, this.position.getX(), this.position.getY());
-        if(randomState==2) this.state = new GotoXY(randomState);
-        if(randomState==3) this.state = new ChaseClosest(randomState);
+        if(randomState==0) this.state = new Rest(randomState, this);
+        if(randomState==1) this.state = new Shake(randomState, this);
+        if(randomState==2) this.state = new GotoXY(randomState, this);
+        if(randomState==3) this.state = new ChaseClosest(randomState, this);
         System.out.println("Position Corporation-" + name + " " + position.getIntX() + "," + position.getIntY() );
     }
 
@@ -65,8 +68,23 @@ public class Corporation extends Entity {
         g2d.drawString(String.format("%s", this.cash), position.getIntX()+20, position.getIntY()+100+50);
         // stockname
         g2d.setColor(Color.BLACK);
-
         g2d.drawString(String.format("%s", this.stockName), position.getIntX()+20, position.getIntY()-9);
+        // badges
+        if(this.whiteBadge){
+            g2d.setColor(Color.WHITE);
+            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+        }
+        if(this.yellowBadge){
+            g2d.setColor(Color.YELLOW);
+            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+        }
+        if(this.redBadge){
+            g2d.setColor(Color.RED);
+            g2d.drawRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+            g2d.fillRect(position.getIntX()+15, position.getIntY()-35, 20,20);
+        }
     }
 
     @Override
@@ -94,13 +112,23 @@ public class Corporation extends Entity {
         else{
         */
 
-            // shake, goto , chase, even rest have a destination.
-            // for the rest case, it is set equal to its own position.
-            // if state is smth else like goto, chase it is set accordingly in the state class.
-            if(Common.destinationReached(this.position, this.state.destination)){
-                     (this.state).setNewDestination(this.position.getX(), this.position.getY());
-            }
-            // move content of corporation (entity) object on gui based on speed and relative distance.
-            Common.moveContent(this, this.position, this.state.destination, this.state.getSpeed());
+        // shake, goto , chase, even rest have a destination.
+        // for the rest case, it is set equal to its own position.
+        // if state is smth else like goto, chase it is set accordingly in the state class.
+
+        if (this.getState().destinationReached()) {
+            (this.getState()).setNewDestination(this.position.getX(), this.position.getY());
+        }
+        // move content of corporation (entity) object on gui based on speed and relative distance.
+        Common.moveContent(this, this.position, this.state.getDestination(), this.state.getSpeed());
+
+    }
+    public void changeCash(int x) {this.cash+=x;}
+    public int getCash() {return cash;}
+    // 0 -> white, 1->yellow, 2-> red badge
+    public void setBadge(boolean w, boolean y, boolean r) {
+        redBadge=r;
+        yellowBadge = y;
+        whiteBadge = w;
     }
 }

@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,28 +41,49 @@ public class Common {
     public static LivePrice getElectronicsPrice() { return electronicsPrice; }
     public static LivePrice getGoldPrice() { return goldPrice; }
 
-    public static Country Chile = new Country("chile", 1, "CL");
-    public static Country Malaysia = new Country("malaysia", 2, "MY");
-    public static Country Mexico = new Country("mexico", 3, "MX");
-    public static Country Nigeria = new Country("nigeria", 4,"NG");
-    public static Country Poland = new Country("poland", 5,"PL");
-    public static Corporation boeing = new Corporation("boeing", "BA", 1);
-    public static Corporation general_dynamics = new Corporation("general_dynamics", "GD", 2);
-    public static Corporation lockheed_martin = new Corporation("lockheed_martin", "LMT", 3);
-    public static Corporation northrop_grumman = new Corporation("northrop_grumman", "NOC", 4);
-    public static Corporation raytheon = new Corporation("raytheon", "RTX", 5);
+    private static List<Country> countries = new ArrayList<>(5);
+    private static List<Corporation> corporations = new ArrayList<>(5);
 
     // countries
      static  {
         // TODO: Here you can instantiate entities/fields
+        Country Chile = new Country("chile", 1, "CL");
+        Country Malaysia = new Country("malaysia", 2, "MY");
+        Country Mexico = new Country("mexico", 3, "MX");
+        Country Nigeria = new Country("nigeria", 4,"NG");
+        Country Poland = new Country("poland", 5,"PL");
+        Corporation boeing = new Corporation("boeing", "BA", 1);
+        Corporation general_dynamics = new Corporation("general_dynamics", "GD", 2);
+        Corporation lockheed_martin = new Corporation("lockheed_martin", "LMT", 3);
+        Corporation northrop_grumman = new Corporation("northrop_grumman", "NOC", 4);
+        Corporation raytheon = new Corporation("raytheon", "RTX", 5);
+
+        countries.add(Mexico);
+        countries.add(Chile);
+        countries.add(Poland);
+        countries.add(Nigeria);
+        countries.add(Malaysia);
+
+        corporations.add(boeing);
+        corporations.add(general_dynamics);
+        corporations.add(lockheed_martin);
+        corporations.add(northrop_grumman);
+        corporations.add(raytheon);
 
     }
 
-    public static boolean destinationReached(Position position, Position destination){
-        if (Math.abs(destination.getX()-position.getX())<0.5 && Math.abs(position.getY()-destination.getY())<0.5)
-            return true;
-        return false;
+    // return Euclidian distance between entities
+    public static double getDistance(Position position1, double x, double y){
+        return Math.sqrt( Math.pow(position1.getX() - x, 2) + Math.pow(position1.getY()-y, 2) );
     }
+    public static List<Country> getCountries(){
+         return countries;
+     }
+    public static List<Corporation> getCorporations(){
+        return corporations;
+    }
+    // since i did not prefer writing the same move code for all classes extending Entity,
+    // i globalized it here.
     public static void moveContent(Entity e, Position position, Position destination, int speed){
         double normalized_disposition_x, normalized_disposition_y;
         normalized_disposition_x=normalized_disposition_y=0.0;
@@ -79,25 +101,16 @@ public class Common {
 
 
     public static void stepAllEntities() {
-
-        System.out.println("Step call: " );
-
         if (randomGenerator.nextInt(200) == 0) foodPrice.step();
         if (randomGenerator.nextInt(300) == 0) electronicsPrice.step();
         if (randomGenerator.nextInt(400) == 0) goldPrice.step();
 
-        Mexico.step();
-        Chile.step();
-        Nigeria.step();
-        Poland.step();
-        Malaysia.step();
-
-        boeing.step();
-        general_dynamics.step();
-        lockheed_martin.step();
-        northrop_grumman.step();
-        raytheon.step();
-
         // TODO: call other entities' step()
+
+        for(Country x : Common.getCountries())
+            x.step();
+
+        for(Corporation x : Common.getCorporations())
+            x.step();
     }
 }

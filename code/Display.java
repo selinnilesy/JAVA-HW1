@@ -19,19 +19,13 @@ public class Display extends JPanel {
         g.drawLine(Common.getSecondVerticalLineX(), 0, Common.getSecondVerticalLineX(), Common.getHorizontalLineY());
         g.drawLine(0, Common.getHorizontalLineY(), Common.getWindowWidth(), Common.getHorizontalLineY());
 
-        Common.Mexico.draw( (Graphics2D) g );
-        Common.Chile.draw( (Graphics2D) g );
-        Common.Nigeria.draw( (Graphics2D) g );
-        Common.Poland.draw( (Graphics2D) g );
-        Common.Malaysia.draw( (Graphics2D) g );
-
-        Common.boeing.draw( (Graphics2D) g );
-        Common.general_dynamics.draw( (Graphics2D) g );
-        Common.lockheed_martin.draw( (Graphics2D) g );
-        Common.northrop_grumman.draw( (Graphics2D) g );
-        Common.raytheon.draw( (Graphics2D) g );
-
-
         // TODO: draw other entities
+
+        for(Country x : Common.getCountries())
+            x.draw( (Graphics2D) g  );
+
+        for(Corporation x : Common.getCorporations())
+            x.draw( (Graphics2D) g  );
+
     }
 }

@@ -15,7 +15,7 @@ public abstract class Order extends Entity {
         this.country=country;
         this.amount = (int) ((Common.getRandomGenerator().nextDouble() * 4) + 1.5);
         System.out.println("Order created with amount: "+ amount);
-        this.speed = (int) (Common.getRandomGenerator().nextDouble() * (70) + 15);
+        this.speed = (int) (Common.getRandomGenerator().nextDouble() * (30) + 25);
         this.destination = new Position(
                 Common.getRandomGenerator().nextInt(
                         (int) (-country.position.getX()),
@@ -41,4 +41,9 @@ public abstract class Order extends Entity {
     }
 
     public abstract void execute();
+    public Country getCountry(){ return this.country;}
+    public int getAmount(){ return this.amount;}
+
+    public abstract boolean chasable();
+
 }

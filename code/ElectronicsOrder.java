@@ -15,4 +15,9 @@ public class ElectronicsOrder extends Order {
         country.changeCash((int) (-this.amount*Common.getElectronicsPrice().getCurrentPrice()));
     }
 
+    @Override
+    public  boolean chasable(){
+        return false;
+    }
+
 }
