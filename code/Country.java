@@ -24,12 +24,12 @@ public class Country extends Entity {
     // even if the order is destructed later on, its country field's reference
     // will be kept in Common and country object will not be destroyed prematurely.
     private List<Order> orders = null;
-    private final Color nameColor = new Color(0, 0, 0);
-    private final Color worthColor = new Color(0, 0, 255);
-    private final Color cashColor = new Color(0, 100, 0);
-    private final Color goldColor = new Color(255, 255, 0);
-    private final Color happinessColor = new Color(180, 0, 0);
-    private final Font font = new Font("Verdana", Font.BOLD, 16);
+    private static final Color nameColor = new Color(0, 0, 0);
+    private static final Color worthColor = new Color(0, 0, 255);
+    private static final Color cashColor = new Color(0, 100, 0);
+    private static final Color goldColor = new Color(255, 255, 0);
+    private static final Color happinessColor = new Color(180, 0, 0);
+    private static final Font font = new Font("Verdana", Font.BOLD, 16);
 
     // position countries in GUI based on initOrder
     public Country(String name, int initOrder, String label){
@@ -82,28 +82,7 @@ public class Country extends Entity {
     }
     @Override
     public void step() {
-        // do not generate orders at an extreme rate. lower the chance to keep it slow
-        // that is comfortable for eye-cathcing.
-        if(Common.getRandomGenerator().nextDouble() > 0.95) {
-            Order order = null;
-            if(happiness < 50.0){
-                // to generate food and electronics more likely
-                int randomOrderType = Common.getRandomGenerator().nextInt(0,6);
-                if(randomOrderType==0) order = new BuyGoldOrder( this);
-                else if(randomOrderType==1) order = new SellGoldOrder( this);
-                else if(randomOrderType>1 && randomOrderType<4 ) order = new FoodOrder( this);
-                else if(randomOrderType>3) order = new ElectronicsOrder( this);
-            }
-            else{
-                boolean buy = Common.getRandomGenerator().nextBoolean();
-                if (buy) {
-                    order = new BuyGoldOrder( this);
-                } else {
-                    order = new SellGoldOrder( this);
-                }
-            }
-            orders.add(order);
-        }
+
         // if an order is already caught while stepping corporations, corporation state handle it
         // and invoke this class to discard its position in the orders array.
         // therefore, no need to double check here again.
@@ -136,6 +115,8 @@ public class Country extends Entity {
     // only country class edit its below fields.
     // this indicates only orders (which has countries)
     // edit these fields amongst other classes.
+    public void addOrder(Order order) {this.orders.add(order);}
+    public double getHappiness() { return this.happiness;}
     public void changeHappiness(double x) {this.happiness+=x;}
     public void changeCash(int x) {this.cash+=x; updateWorth();}
     public void changeGold(int x) {this.gold+=x; updateWorth();}

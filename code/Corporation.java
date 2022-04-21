@@ -18,7 +18,7 @@ public class Corporation extends Entity {
     private String name, stockName;
     private BufferedImage image;
     private boolean redBadge, whiteBadge, yellowBadge;
-    private final Font font = new Font("Verdana", Font.BOLD, 16);
+    private static final Font font = new Font("Verdana", Font.BOLD, 16);
 
 
     // to generate new badge each time awarded.
@@ -29,24 +29,16 @@ public class Corporation extends Entity {
             this.badgecolor = new Color(r,g,b);
         }
     }
-    public State getState(){return this.state;}
+
     public Corporation(String name, String stockName,  int initOrder){
         super(Common.getWindowWidth()*initOrder/7,Common.getWindowHeight()*1/5);
         this.name=name;
         this.cash=0;
         this.stockName = stockName;
-        int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
-        // since state is given abstract and adding a class to HW is forbidden,
-        // i cannot create a factory to generate state objects by invoking
-        // generate methods of corresponding factories but rather mess with ifs.
-        if(randomState==0) this.state = new Rest(randomState, this);
-        if(randomState==1) this.state = new Shake(randomState, this);
-        if(randomState==2) this.state = new GotoXY(randomState, this);
-        if(randomState==3) this.state = new ChaseClosest(randomState, this);
         System.out.println("Position Corporation-" + name + " " + position.getIntX() + "," + position.getIntY() );
     }
 
-    private final Color cashColor = new Color(180, 0, 0);
+    private static final Color cashColor = new Color(180, 0, 0);
 
     @Override
     public void draw(Graphics2D g2d) {
@@ -64,7 +56,7 @@ public class Corporation extends Entity {
         g2d.setColor(State.stateColor);
         g2d.drawString(String.format("%s", this.state.name), position.getIntX()+15, position.getIntY()+100+30);
         // cash
-        g2d.setColor(Color.RED);
+        g2d.setColor(cashColor);
         g2d.drawString(String.format("%s", this.cash), position.getIntX()+20, position.getIntY()+100+50);
         // stockname
         g2d.setColor(Color.BLACK);
@@ -123,6 +115,8 @@ public class Corporation extends Entity {
         Common.moveContent(this, this.position, this.state.getDestination(), this.state.getSpeed());
 
     }
+    public void setState(State x) {this.state=x;}
+    public State getState(){return this.state;}
     public void changeCash(int x) {this.cash+=x;}
     public int getCash() {return cash;}
     // 0 -> white, 1->yellow, 2-> red badge

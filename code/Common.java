@@ -57,7 +57,6 @@ public class Common {
         Corporation lockheed_martin = new Corporation("lockheed_martin", "LMT", 3);
         Corporation northrop_grumman = new Corporation("northrop_grumman", "NOC", 4);
         Corporation raytheon = new Corporation("raytheon", "RTX", 5);
-
         countries.add(Mexico);
         countries.add(Chile);
         countries.add(Poland);
@@ -70,6 +69,14 @@ public class Common {
         corporations.add(northrop_grumman);
         corporations.add(raytheon);
 
+        int randomState;
+        for(Corporation corp : Common.getCorporations()){
+            randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
+            if(randomState==0) corp.setState(new Rest(randomState, corp));
+            if(randomState==1) corp.setState(new Shake(randomState, corp));
+            if(randomState==2) corp.setState(new GotoXY(randomState, corp));
+            if(randomState==3) corp.setState(new ChaseClosest(randomState, corp));
+        }
     }
 
     // return Euclidian distance between entities
@@ -107,8 +114,33 @@ public class Common {
 
         // TODO: call other entities' step()
 
-        for(Country x : Common.getCountries())
-            x.step();
+        for(Country country : Common.getCountries()){
+            // do not generate orders at an extreme rate. lower the chance to keep it slow
+            // that is comfortable for eye-cathcing.
+            if(Common.getRandomGenerator().nextDouble() > 0.95) {
+                Order order = null;
+                if(country.getHappiness() < 50.0){
+                    // keep the possibility large for non-goldorder types
+                    // to generate food and electronics order more likely
+                    int randomOrderType = Common.getRandomGenerator().nextInt(0,6);
+                    if(randomOrderType==0) order = new BuyGoldOrder( country);
+                    else if(randomOrderType==1) order = new SellGoldOrder( country);
+                    else if(randomOrderType>1 && randomOrderType<4 ) order = new FoodOrder( country);
+                    else if(randomOrderType>3) order = new ElectronicsOrder( country);
+                }
+                else{
+                    boolean buy = Common.getRandomGenerator().nextBoolean();
+                    if (buy) {
+                        order = new BuyGoldOrder( country);
+                    } else {
+                        order = new SellGoldOrder( country);
+                    }
+                }
+                country.addOrder(order);
+            }
+            country.step();
+        }
+
 
         for(Corporation x : Common.getCorporations())
             x.step();
