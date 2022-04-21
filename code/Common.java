@@ -70,6 +70,9 @@ public class Common {
         corporations.add(raytheon);
 
         int randomState;
+        // call this block once within the class creation time
+        // to set state to generated corporations. in the step function below,
+        // these states will be updated randomly.
         for(Corporation corp : Common.getCorporations()){
             randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
             if(randomState==0) corp.setState(new Rest(randomState, corp));
@@ -102,8 +105,11 @@ public class Common {
             normalized_disposition_x = (disposition_x/ sqrt);
             normalized_disposition_y = (disposition_y/ sqrt);
         }
-        e.position.setX(position.getX() + (normalized_disposition_x * speed));
-        e.position.setY(position.getY() + (normalized_disposition_y * speed));
+        e.getPosition().setX(position.getX() + (normalized_disposition_x * speed));
+        e.getPosition().setY(position.getY() + (normalized_disposition_y * speed));
+        if(e instanceof Corporation &&  ((Corporation) e).getState() instanceof GotoXY){
+            System.out.println("Entity object" + ((Corporation) e).getState() + " moved to: " + e.getPosition().getX() + ","+ e.getPosition().getY() + " with speed: " + speed);
+        }
     }
 
 
@@ -114,6 +120,7 @@ public class Common {
 
         // TODO: call other entities' step()
 
+        // create new orders for countries and assign them
         for(Country country : Common.getCountries()){
             // do not generate orders at an extreme rate. lower the chance to keep it slow
             // that is comfortable for eye-cathcing.
@@ -140,9 +147,28 @@ public class Common {
             }
             country.step();
         }
-
-
-        for(Corporation x : Common.getCorporations())
-            x.step();
+    /*
+        // create new states and assign to current states of corporations
+        if(Common.getRandomGenerator().nextDouble() > 0.95) {
+            for(Corporation corpo : Common.getCorporations()) {
+                int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
+                // change the state to something else. otherwise, it would be harder to
+                // assess the implementation of a state such as chase.
+                // it will not demonstrate its functionality properly.
+                if (randomState != corpo.getState().getState()) {
+                    // destroy previous state to prevent memleak by notifying GC.
+                    // its country (2-way has relationship) was only a reference so nothing to do with it.
+                    corpo.setState(null);
+                    randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
+                    if (randomState == 0) corpo.setState(new Rest(randomState, corpo));
+                    if (randomState == 1) corpo.setState(new Shake(randomState, corpo));
+                    if (randomState == 2) corpo.setState(new GotoXY(randomState, corpo));
+                    if (randomState == 3) corpo.setState(new ChaseClosest(randomState, corpo));
+                }
+            }
+        }
+    */
+        for(Corporation corpo : Common.getCorporations())
+            corpo.step();
     }
 }

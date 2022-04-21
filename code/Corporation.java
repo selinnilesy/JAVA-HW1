@@ -81,44 +81,25 @@ public class Corporation extends Entity {
 
     @Override
     public void step() {
-
-        this.state.lifeTime++;
-        /*
-        if(this.state.lifeTime==this.state.stateCounter){
-            this.state.lifeTime=0;
-            int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
-            if (randomState != this.state.currentState) {
-                // destroy previous state to prevent memleak by notifying GC
-                this.state = null;
-
-                // since state is given abstract and adding a class to HW is forbidden,
-                // i cannot create a factory to generate state objects by invoking
-                // generate methods of corresponding factories but rather mess with ifs.
-                if (randomState == 0) this.state = new Rest(randomState, this.position.getX(), this.position.getY());
-                if (randomState == 1) this.state = new Shake(randomState, this.position.getX(), this.position.getY());
-                if (randomState == 2) this.state = new GotoXY(randomState);
-                if (randomState == 3) this.state = new ChaseClosest(randomState);
-            }
-        }
-
-        else{
-        */
-
         // shake, goto , chase, even rest have a destination.
         // for the rest case, it is set equal to its own position.
         // if state is smth else like goto, chase it is set accordingly in the state class.
-
-        if (this.getState().destinationReached()) {
+        if (this.getState().destinationReached()){
             (this.getState()).setNewDestination(this.position.getX(), this.position.getY());
+            System.out.println("Obejct: " + this + " attemp to reset destination.");
         }
         // move content of corporation (entity) object on gui based on speed and relative distance.
         Common.moveContent(this, this.position, this.state.getDestination(), this.state.getSpeed());
-
     }
+
     public void setState(State x) {this.state=x;}
+
     public State getState(){return this.state;}
+
     public void changeCash(int x) {this.cash+=x;}
+
     public int getCash() {return cash;}
+
     // 0 -> white, 1->yellow, 2-> red badge
     public void setBadge(boolean w, boolean y, boolean r) {
         redBadge=r;

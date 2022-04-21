@@ -78,7 +78,6 @@ public class Country extends Entity {
 
     public void removeOrder(Order x){
         this.orders.remove(x);
-        System.out.println("Country: " + name + "destroyed its order as it is caught.");
     }
     @Override
     public void step() {
@@ -90,7 +89,6 @@ public class Country extends Entity {
             Order x = orders.get(i);
             x.step();
             if(x.position.getY() < Common.horizontalLineY) {
-                System.out.println(" Order exceeded limit ");
                 orders.remove(x);
                 // execute order.
                 x.execute();
@@ -98,10 +96,10 @@ public class Country extends Entity {
                 for(Corporation corp : Common.getCorporations()){
                     // here i deliberately check reference equality, not values.
                     // if true, reference equality will yield
-                    // this order is being chased by this unknown state.
+                    // this order is being chased by this unknown state
+                    // (i set them not a value but reference to be able to constantly follow the position).
                     if(corp.getState().getDestination()==x.getPosition()){
                         // therefore, i use down casting.
-                        System.out.println(" and corporation is warned");
                         ((ChaseClosest) corp.getState()).stopChasing(corp.getPosition());
                     }
                 }

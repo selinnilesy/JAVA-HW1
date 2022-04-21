@@ -21,7 +21,6 @@ public class ChaseClosest extends State {
             for (Order o : orders) {
                 if(o.chasable() == false) continue;
                 double orderDistance = (Common.getDistance(o.position, x, y));
-                System.out.println("Order-Corporation distance: " + orderDistance);
                 if (orderDistance < minDistance) {
                     minDistance = orderDistance;
                     this.closestOrder = o;
@@ -52,7 +51,6 @@ public class ChaseClosest extends State {
             // country does this as well (when order hits the horizontal)
             for(Corporation corp : Common.getCorporations()){
                 if(corp!=this.corporation && corp.getState().getDestination()==this.closestOrder.getPosition()){
-                    System.out.println(" and corporation is warned");
                     ((ChaseClosest) corp.getState()).stopChasing(corp.getPosition());
                 }
             }

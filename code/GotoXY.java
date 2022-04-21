@@ -1,30 +1,31 @@
 public class GotoXY extends State {
-    private double speed;
     GotoXY(int currentState, Corporation corpo) {
         super(currentState, "GotoXY", corpo);
-        this.destination = new Position(0,0);
-        // arguments not needed this time, therefore 0.
-        // I wanted to use function overload but
-        // since state type cannot be known by the corporation,
-        // it cannot know what set new destination function signature to call
-        // when step is invoked.
-        setNewDestination(0,0 );
+        this.destination = new Position(corpo.getPosition().getX(), corpo.getPosition().getY());
     }
 
     @Override
     public void setNewDestination(double x, double y){
-        double change = Common.getRandomGenerator().nextDouble() * (Common.windowWidth-100);
-        this.destination.setX(change);
+        System.out.println("GOTOXY object" + this + "is here: " + this.destination.getX() + ","+ this.destination.getY() + " with speed: " + this.speed);
+
+        double newPos = Common.getRandomGenerator().nextDouble(0.0,Common.windowWidth-100-x);
+        this.destination.setX(newPos);
         // consider countries positioned at 3/5 of the height. do not pass them below.
-        change = Common.getRandomGenerator().nextDouble() * ((Common.getWindowHeight()*3/5) - Common.horizontalLineY) + Common.horizontalLineY;
-        this.destination.setY( change );
+        newPos = Common.getRandomGenerator().nextDouble(Common.horizontalLineY,(Common.getWindowHeight()*(3.0/5)));
+        this.destination.setY( newPos );
         this.speed= (int) (Common.getRandomGenerator().nextDouble() * (20) + 20);
+
+        System.out.println("GOTOXY object" + this + "is set to: " + this.destination.getX() + ","+ this.destination.getY() + " with speed: " + this.speed);
     }
 
     @Override
     public boolean destinationReached() {
-        if (Math.abs(destination.getX()-corporation.getPosition().getX())<0.5 && Math.abs(corporation.getPosition().getY()-destination.getY())<0.5)
+        if (Math.abs(this.destination.getX()-this.corporation.getPosition().getX())<0.5 &&
+                Math.abs(this.corporation.getPosition().getY()-this.destination.getY())<0.5){
+            System.out.println("GOTOXY object: " + this +  " destinationReached returns true");
             return true;
+        }
+        System.out.println("GOTOXY object: " + this +  " destinationReached returns true");
         return false;
     }
 

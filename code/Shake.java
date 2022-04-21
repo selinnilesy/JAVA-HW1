@@ -18,7 +18,7 @@ public class Shake extends State {
 
     @Override
     public boolean destinationReached() {
-        if (Math.abs(destination.getX()-corporation.getPosition().getX())<0.5 && Math.abs(corporation.getPosition().getY()-destination.getY())<0.5)
+        if (Math.abs(this.destination.getX()-this.corporation.getPosition().getX())<0.5 && Math.abs(this.corporation.getPosition().getY()-this.destination.getY())<0.5)
             return true;
         return false;
     }

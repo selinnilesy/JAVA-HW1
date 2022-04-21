@@ -14,13 +14,14 @@ public abstract class Order extends Entity {
         super(country.position.getX()+ Common.getRandomGenerator().nextDouble() * 150, country.position.getY() - 20);
         this.country=country;
         this.amount = (int) ((Common.getRandomGenerator().nextDouble() * 4) + 1.5);
-        System.out.println("Order created with amount: "+ amount);
+        //System.out.println("Order created with amount: "+ amount);
         this.speed = (int) (Common.getRandomGenerator().nextDouble() * (30) + 25);
         this.destination = new Position(
                 Common.getRandomGenerator().nextInt(
                         (int) (-country.position.getX()),
                         (int) (Common.getWindowWidth()-country.position.getX())
                 ),
+                // no need to worry or set y for horizontal line. during it, it will be handled anyways.
                 -country.position.getY()
         );
     }
