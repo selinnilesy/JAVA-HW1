@@ -86,7 +86,7 @@ public class Corporation extends Entity {
         // if state is smth else like goto, chase it is set accordingly in the state class.
         if (this.getState().destinationReached()){
             (this.getState()).setNewDestination(this.position.getX(), this.position.getY());
-            System.out.println("Obejct: " + this + " attemp to reset destination.");
+            System.out.println("Obejct: " + this + " attempted to reset destination.");
         }
         // move content of corporation (entity) object on gui based on speed and relative distance.
         Common.moveContent(this, this.position, this.state.getDestination(), this.state.getSpeed());

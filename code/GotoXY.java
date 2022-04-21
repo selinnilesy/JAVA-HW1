@@ -20,12 +20,12 @@ public class GotoXY extends State {
 
     @Override
     public boolean destinationReached() {
-        if (Math.abs(this.destination.getX()-this.corporation.getPosition().getX())<0.5 &&
-                Math.abs(this.corporation.getPosition().getY()-this.destination.getY())<0.5){
+        if (Math.abs(this.destination.getX()-this.corporation.getPosition().getX())<20 &&
+                Math.abs(this.corporation.getPosition().getY()-this.destination.getY())<20){
             System.out.println("GOTOXY object: " + this +  " destinationReached returns true");
             return true;
         }
-        System.out.println("GOTOXY object: " + this +  " destinationReached returns true");
+        System.out.println("GOTOXY object: " + this +  " destinationReached returns false");
         return false;
     }
 
