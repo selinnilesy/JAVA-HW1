@@ -147,7 +147,7 @@ public class Common {
             }
             country.step();
         }
-    /*
+
         // create new states and assign to current states of corporations
         if(Common.getRandomGenerator().nextDouble() > 0.95) {
             for(Corporation corpo : Common.getCorporations()) {
@@ -167,7 +167,7 @@ public class Common {
                 }
             }
         }
-    */
+
         for(Corporation corpo : Common.getCorporations())
             corpo.step();
     }
