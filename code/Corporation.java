@@ -3,6 +3,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.io.File;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
@@ -81,6 +82,42 @@ public class Corporation extends Entity {
 
     @Override
     public void step() {
+        // if any order has come onto my flag,consume it before moving.
+        // and let coreponding country and any chasing corproations know about its destruction.
+        // for loop checking each orders distance to me
+        // when found, get its country.
+        for(Country country : Common.getCountries()){
+            Iterator<Order> it = country.getOrders().iterator();
+            while(it.hasNext()){
+                Order o = (Order) it.next();
+                // order has come onto me
+                if (Common.getDistance(o.getPosition(), this.getPosition().getX(), this.getPosition().getY()) < 5){
+                    // destroy from originating country's memory
+                    it.remove();
+                    // clean from chasing state's destination assignment (if any)
+                    // i did not want to leave empty methods in polymorphism (chasing only happens to goldorder)
+                    // therefore i used testing whether the order is chasable for state to quit chasing it.
+                    if(o.chasable()){
+                        // quit chasing  for other corporations who did not reach its order yet as order is being destroyed.
+                        for(Corporation corpo : Common.getCorporations()) {
+                            // to not have a memory error, process other corporations, then delete from me.
+                            // based on my implementation design,
+                            // position-destination are only set equal by their references if it's a chasing state.
+                            // so safe to use downcasting.
+                            // country calls below function as well (when order hits the horizontal)
+                            if (this != corpo && corpo.getState().getDestination() == o.getPosition()) {
+                                // fix corpo's destination to its position to have a new destination implicitly in the next step.
+                                ((ChaseClosest) (corpo.getState())).stopChasing(corpo.getPosition());
+                            }
+                        }
+                        // i skipped processing this corporation's chasing possibility
+                        // because I already handled in the ChaseClosest class's order-following code.
+                        // (below, there is setNewDestination function overriden by each class).
+                     }
+                }
+             }
+         }
+
         // shake, goto , chase, even rest have a destination.
         // for the rest case, it is set equal to its own position.
         // if state is smth else like goto, chase it is set accordingly in the state class.

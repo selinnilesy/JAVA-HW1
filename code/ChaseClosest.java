@@ -47,15 +47,7 @@ public class ChaseClosest extends State {
             // when order is caught.
             // this is determined to be a gold order in findClosestOrder function.
             ((GoldOrder) this.closestOrder).corporationInteraction(this.corporation);
-            // also warn other chasing corporations that this order is caught by this.
-            // country does this as well (when order hits the horizontal)
-            for(Corporation corp : Common.getCorporations()){
-                if(corp!=this.corporation && corp.getState().getDestination()==this.closestOrder.getPosition()){
-                    ((ChaseClosest) corp.getState()).stopChasing(corp.getPosition());
-                }
-            }
-            // destroy it from the country's list.
-            this.closestOrder.getCountry().removeOrder(this.closestOrder);
+
             // as chase state also delete its reference,
             // order object's reference counter became 0 and it is destructed.
             this.closestOrder = null;
