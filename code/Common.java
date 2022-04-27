@@ -157,7 +157,6 @@ public class Common {
             country.step();
         }
 
-        /*
         // create new states and assign to current states of corporations
         // (95%) is again for eye-catching.
         if(Common.getRandomGenerator().nextDouble() > 0.95) {
@@ -178,8 +177,6 @@ public class Common {
                 }
             }
         }
-        */
-
 
         // absorb any orders on itself, and warn others chasing it to stop chasing and
         // countries possessing that order and dispositioning them.

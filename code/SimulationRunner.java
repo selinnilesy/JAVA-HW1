@@ -22,7 +22,6 @@ public class SimulationRunner {
         new Timer(5, actionEvent -> {
             Common.stepAllEntities();
             runner.display.repaint();
-            runner.display.revalidate();
 
         }).start();
     }
