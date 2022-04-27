@@ -38,7 +38,7 @@ public class Corporation extends Entity {
         this.name=name;
         this.cash=0;
         this.stockName = stockName;
-        System.out.println("Position Corporation-" + name + " " + position.getIntX() + "," + position.getIntY() );
+       // System.out.println("Position Corporation-" + name + " " + position.getIntX() + "," + position.getIntY() );
     }
 
     private static final Color cashColor = new Color(180, 0, 0);
@@ -96,20 +96,26 @@ public class Corporation extends Entity {
                 // order has come onto me
                 double diff_x = o.getPosition().getX()-this.position.getX();
                 double diff_y = o.getPosition().getY()-this.position.getY();
+                if(this.state instanceof Shake){
+                    System.out.println("Shake corpo: " + this + "scanning orders in the environment");
+                }
                 // leave an acceptable 20 padding-distance between objects for float precision
                 // needs to be chasable (goldorder) to  absorb
                 if(o.chasable() && ((diff_x < -1.0 && diff_x > -20 && diff_y > -120 && diff_y < 20) || (diff_x > -20  && diff_x < 120 && diff_y > -120 && diff_y < 20))){
                     // execute the arms-sell and cash gain of the corporation
                     // i had to left some emthods empty bcs order type cannot be known but still only goldorders are absorbed by corps
                     // to solve that, i used chasable method to not invoke empty methods at all, but if code can be discarded as well.
+                    if(this.state instanceof Shake && (o instanceof BuyGoldOrder || o instanceof SellGoldOrder)){
+                        System.out.println("Shake corpo: " + this + "found goldorder on itself");
+                    }
                     o.corporationInteraction(this);
                     // destroy from originating country's memory
                     it.remove();
-                    System.out.println("Order object: " + o + " has been removed from country orderlist");
+                    //System.out.println("Order object: " + o + " has been removed from country orderlist");
                     // clean from chasing state's destination assignment (if any)
                     // i did not want to leave empty methods in polymorphism (chasing only happens to goldorder)
                     // therefore i used testing whether the order is chasable for state to quit chasing it.
-                    if(o.chasable()){
+
                         // quit chasing  for other corporations who did not reach its order yet as order is being destroyed.
                         for(Corporation corpo : Common.getCorporations()) {
                             // to not have a memory error, process other corporations, then delete from me.
@@ -126,7 +132,6 @@ public class Corporation extends Entity {
                         // because I already handled in the ChaseClosest class's order-following code.
                         // (below, there is setNewDestination function overriden by each class).
                      }
-                }
              }
          }
 
@@ -135,7 +140,7 @@ public class Corporation extends Entity {
         // if state is smth else like goto, chase it is set accordingly in the state class.
         if (this.getState().destinationReached()){
             (this.getState()).setNewDestination(this.position.getX(), this.position.getY());
-            System.out.println("Obejct: " + this + " attempted to reset destination.");
+           // System.out.println("Obejct: " + this + " attempted to reset destination.");
         }
         //
         // if a corp with chase state, corp has to change its mind to move towards another order.

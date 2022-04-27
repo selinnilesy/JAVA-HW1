@@ -19,7 +19,7 @@ public class SimulationRunner {
         runner.window.setVisible(true);
 
 
-        new Timer(5, actionEvent -> {
+        new Timer(1000, actionEvent -> {
             Common.stepAllEntities();
             runner.display.repaint();
 

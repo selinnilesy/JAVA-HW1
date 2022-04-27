@@ -50,7 +50,7 @@ public class ChaseClosest extends State {
     @Override
     public void setNewDestination(double x, double y){
         if(closestOrder != null) {
-            System.out.println("Caught.");
+            //System.out.println("Caught.");
             // when order is caught.
 
             // as chase state also delete closestOrder's reference,
