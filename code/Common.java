@@ -9,6 +9,9 @@ public class Common {
 
     private static final  Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
+    // i designed my GUI for all screen sizes, i read them with the Dimension size object.
+    // then, i positioned countries and corpos according to this width and height's proportions to the screen.
+    // for example, countries are positioned at 3/5 of the height in their constructors.
     public static final int windowWidth = (int) size.width;
     public static final int windowHeight = (int) size.height;
 
@@ -47,6 +50,10 @@ public class Common {
     // countries
      static  {
         // TODO: Here you can instantiate entities/fields
+        // initOrder is only for positioning all corpos by using a padding (next to eachother) at initialization
+        // announcement about this has come on the submission date so i did not change it to assign
+        // a random position between the horizontal-countries range.
+        // they are always positioned (sometimes their destinations) in the horizontal-countries range.
         Country Chile = new Country("chile", 1, "CL");
         Country Malaysia = new Country("malaysia", 2, "MY");
         Country Mexico = new Country("mexico", 3, "MX");
@@ -71,8 +78,9 @@ public class Common {
 
         int randomState;
         // call this block once within the class creation time
-        // to set state to generated corporations. in the step function below,
-        // these states will be updated randomly.
+        // to set state to generated corporations and display them initially.
+        // in the step function below,
+        // these states will be updated randomly later on.
         for(Corporation corp : Common.getCorporations()){
             randomState = (int) (Common.getRandomGenerator().nextDouble() * (3) + 0.5);
             if(randomState==0) corp.setState(new Rest(randomState, corp));
@@ -82,6 +90,7 @@ public class Common {
         }
     }
 
+    // i did not notice this has been already implemented by the TA
     // return Euclidian distance between entities
     public static double getDistance(Position position1, double x, double y){
         return Math.sqrt( Math.pow(position1.getX() - x, 2) + Math.pow(position1.getY()-y, 2) );
@@ -93,7 +102,7 @@ public class Common {
         return corporations;
     }
     // since i did not prefer writing the same move code for all classes extending Entity,
-    // i globalized it here.
+    // i globalized it here. this function dispositions Entity object considering its current pos and dest and speed.
     public static void moveContent(Entity e, Position position, Position destination, int speed){
         double normalized_disposition_x, normalized_disposition_y;
         normalized_disposition_x=normalized_disposition_y=0.0;
@@ -122,8 +131,8 @@ public class Common {
 
         // create new orders for countries and assign them
         for(Country country : Common.getCountries()){
-            // do not generate orders at an extreme rate. lower the chance to keep it slow
-            // that is comfortable for eye-cathcing.
+            // do not generate orders at an extreme rate. lower the chance (95%) to keep it slow
+            // that is comfortable for eye-catching of the TA.
             if(Common.getRandomGenerator().nextDouble() > 0.95) {
                 Order order = null;
                 if(country.getHappiness() < 50.0){
@@ -148,13 +157,15 @@ public class Common {
             country.step();
         }
 
+        /*
         // create new states and assign to current states of corporations
+        // (95%) is again for eye-catching.
         if(Common.getRandomGenerator().nextDouble() > 0.95) {
             for(Corporation corpo : Common.getCorporations()) {
                 int randomState = (int) (Common.getRandomGenerator().nextDouble() * (3));
                 // change the state to something else. otherwise, it would be harder to
-                // assess the implementation of a state such as chase.
-                // it will not demonstrate its functionality properly.
+                // assess by eye my homework implementation of a state such as chase.
+                // it would not demonstrate its functionality properly.
                 if (randomState != corpo.getState().getState()) {
                     // destroy previous state to prevent memleak by notifying GC.
                     // its country (2-way has relationship) was only a reference so nothing to do with it.
@@ -167,7 +178,12 @@ public class Common {
                 }
             }
         }
+        */
 
+
+        // absorb any orders on itself, and warn others chasing it to stop chasing and
+        // countries possessing that order and dispositioning them.
+        // also invoke move overridden function of each state
         for(Corporation corpo : Common.getCorporations())
             corpo.step();
     }

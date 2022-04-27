@@ -22,4 +22,6 @@ public class Shake extends State {
             return true;
         return false;
     }
+    @Override
+    public void changeDestination(double x, double y) {}
 }

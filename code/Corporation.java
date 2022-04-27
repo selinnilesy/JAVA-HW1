@@ -31,6 +31,8 @@ public class Corporation extends Entity {
         }
     }
 
+    // initOrder is only for positioning all corpos at initialization next to eachother
+    // announcement about this has come on the submission date so i did not change it
     public Corporation(String name, String stockName,  int initOrder){
         super(Common.getWindowWidth()*initOrder/7,Common.getWindowHeight()*1/5);
         this.name=name;
@@ -83,17 +85,27 @@ public class Corporation extends Entity {
     @Override
     public void step() {
         // if any order has come onto my flag,consume it before moving.
-        // and let coreponding country and any chasing corproations know about its destruction.
+        // and let corresponding country and any chasing corporations know about its destruction.
         // for loop checking each orders distance to me
         // when found, get its country.
         for(Country country : Common.getCountries()){
+            // i have to use iterator to prevent runtime concurrent modification exception of the list.
             Iterator<Order> it = country.getOrders().iterator();
             while(it.hasNext()){
                 Order o = (Order) it.next();
                 // order has come onto me
-                if (Common.getDistance(o.getPosition(), this.getPosition().getX(), this.getPosition().getY()) < 5){
+                double diff_x = o.getPosition().getX()-this.position.getX();
+                double diff_y = o.getPosition().getY()-this.position.getY();
+                // leave an acceptable 20 padding-distance between objects for float precision
+                // needs to be chasable (goldorder) to  absorb
+                if(o.chasable() && ((diff_x < -1.0 && diff_x > -20 && diff_y > -120 && diff_y < 20) || (diff_x > -20  && diff_x < 120 && diff_y > -120 && diff_y < 20))){
+                    // execute the arms-sell and cash gain of the corporation
+                    // i had to left some emthods empty bcs order type cannot be known but still only goldorders are absorbed by corps
+                    // to solve that, i used chasable method to not invoke empty methods at all, but if code can be discarded as well.
+                    o.corporationInteraction(this);
                     // destroy from originating country's memory
                     it.remove();
+                    System.out.println("Order object: " + o + " has been removed from country orderlist");
                     // clean from chasing state's destination assignment (if any)
                     // i did not want to leave empty methods in polymorphism (chasing only happens to goldorder)
                     // therefore i used testing whether the order is chasable for state to quit chasing it.
@@ -110,7 +122,7 @@ public class Corporation extends Entity {
                                 ((ChaseClosest) (corpo.getState())).stopChasing(corpo.getPosition());
                             }
                         }
-                        // i skipped processing this corporation's chasing possibility
+                        // i here skipped processing this corporation's chasing possibility
                         // because I already handled in the ChaseClosest class's order-following code.
                         // (below, there is setNewDestination function overriden by each class).
                      }
@@ -125,6 +137,11 @@ public class Corporation extends Entity {
             (this.getState()).setNewDestination(this.position.getX(), this.position.getY());
             System.out.println("Obejct: " + this + " attempted to reset destination.");
         }
+        //
+        // if a corp with chase state, corp has to change its mind to move towards another order.
+        // this could be also implemented in a move function for entities, but i did not want to use the same lines of code (for simply moving)
+        // for orders and corporations with states other than chase (shake, goto.. nothing special)
+        this.state.changeDestination(this.position.getX(), this.position.getY());
         // move content of corporation (entity) object on gui based on speed and relative distance.
         Common.moveContent(this, this.position, this.state.getDestination(), this.state.getSpeed());
     }

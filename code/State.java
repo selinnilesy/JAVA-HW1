@@ -20,4 +20,5 @@ public abstract class State {
     public Position getDestination(){ return this.destination;}
     public abstract void setNewDestination(double x, double y);
     public abstract boolean destinationReached();
+    public abstract void changeDestination(double x, double y);
 }

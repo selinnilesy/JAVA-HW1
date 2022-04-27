@@ -16,6 +16,7 @@ public class BuyGoldOrder extends GoldOrder {
         country.changeCash((int) (-this.amount*Common.getGoldPrice().getCurrentPrice()));
     }
 
+    // this can be processed with any country order is positioned on
     @Override
     public void corporationInteraction(Corporation corp){
         this.country.changeCash((int) (-this.amount*Common.getGoldPrice().getCurrentPrice()));
@@ -24,5 +25,9 @@ public class BuyGoldOrder extends GoldOrder {
         setBadgesToCorporation(corp);
     }
 
+    @Override
+    public  boolean chasable(){
+        return true;
+    }
 
 }

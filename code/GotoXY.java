@@ -20,6 +20,7 @@ public class GotoXY extends State {
 
     @Override
     public boolean destinationReached() {
+        // leave an acceptable 20 padding-distance between objects. otherwise, floating point errors occur due to precision loss.
         if (Math.abs(this.destination.getX()-this.corporation.getPosition().getX())<20 &&
                 Math.abs(this.corporation.getPosition().getY()-this.destination.getY())<20){
             System.out.println("GOTOXY object: " + this +  " destinationReached returns true");
@@ -27,6 +28,9 @@ public class GotoXY extends State {
         }
         System.out.println("GOTOXY object: " + this +  " destinationReached returns false");
         return false;
+    }
+    @Override
+    public void changeDestination(double x, double y) {
     }
 
 }

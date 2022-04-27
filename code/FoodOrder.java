@@ -19,5 +19,7 @@ public class FoodOrder extends Order {
     public  boolean chasable(){
         return false;
     }
+    @Override
+    public void corporationInteraction(Corporation corp){};
 
 }

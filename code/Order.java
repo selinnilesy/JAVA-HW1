@@ -46,5 +46,6 @@ public abstract class Order extends Entity {
     public int getAmount(){ return this.amount;}
 
     public abstract boolean chasable();
+    public abstract void corporationInteraction(Corporation corp);
 
 }

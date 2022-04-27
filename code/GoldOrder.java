@@ -19,8 +19,7 @@ public abstract class GoldOrder extends Order {
 
     // is it fit for hunting? yes. other order types do not have this method.
     @Override
-    public  boolean chasable(){
-        return true;
-    }
+    public abstract boolean chasable();
+
 
 }

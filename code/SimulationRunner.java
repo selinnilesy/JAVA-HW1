@@ -1,5 +1,7 @@
 import javax.swing.*;
 
+import static java.lang.Thread.sleep;
+
 
 public class SimulationRunner {
     private JFrame window = new JFrame();
@@ -21,6 +23,7 @@ public class SimulationRunner {
             Common.stepAllEntities();
             runner.display.repaint();
             runner.display.revalidate();
+
         }).start();
     }
 

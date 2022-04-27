@@ -23,4 +23,9 @@ public class SellGoldOrder extends GoldOrder {
         this.country.changeHappiness(-this.amount*0.1);
         setBadgesToCorporation(corp);
     }
+
+    @Override
+    public  boolean chasable(){
+        return true;
+    }
 }

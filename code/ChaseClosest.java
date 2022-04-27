@@ -9,10 +9,11 @@ public class ChaseClosest extends State {
         setNewDestination( this.destination.getX(),  this.destination.getY());
         // reference the picked order and follow it until it is destroyed.
         closestOrder = null;
+        // to keep track of any closest order
     }
 
     // searches and sets closest order reference.
-    // it can keep the reference null if no orders have been found.
+    // it keeps the closestOrder reference null if no orders found.
     public boolean findClosestOrder(double x, double y) {
         double minDistance = Double.MAX_VALUE;
         boolean set = false;
@@ -41,15 +42,19 @@ public class ChaseClosest extends State {
     }
     // TODO
     @Override
+    public void changeDestination(double x, double y) {
+        if(findClosestOrder(x,y)){
+            this.destination = closestOrder.position;
+        }
+    }
+    @Override
     public void setNewDestination(double x, double y){
         if(closestOrder != null) {
             System.out.println("Caught.");
             // when order is caught.
-            // this is determined to be a gold order in findClosestOrder function.
-            ((GoldOrder) this.closestOrder).corporationInteraction(this.corporation);
 
-            // as chase state also delete its reference,
-            // order object's reference counter became 0 and it is destructed.
+            // as chase state also delete closestOrder's reference,
+            // order object's reference counter will become 0 and be destructed by GC.
             this.closestOrder = null;
             this.destination = null;
             boolean set = findClosestOrder( x,  y);
@@ -63,7 +68,8 @@ public class ChaseClosest extends State {
         }
         else{
             // state has just initiated and looking for orders to catch
-            // or already tried and could not find any order to chase yet.
+            // or already tried and could not find any order to chase yet (when there are no gold orders roaming around)
+            // or its order has been absorv
             boolean set = findClosestOrder( x,  y);
             this.speed = (int) (Common.getRandomGenerator().nextDouble() * (18) + 10);
             if(set == false){
@@ -75,14 +81,17 @@ public class ChaseClosest extends State {
         }
     }
 
+
     // since image of a corporation is 100x100, we need to consider an order
     // to be absorbed when the image covers it from any corners.
     @Override
     public boolean destinationReached() {
+        // state dest represents reference assignment of order's current position variable
+        // leave an acceptable 20 padding-distance between objects
         double diff_x = destination.getX()-corporation.getPosition().getX();
         double diff_y = destination.getY()-corporation.getPosition().getY();
-        if(diff_x > -0.5 && diff_x < 100.5 && diff_y>-100.5 && diff_y < 0.5)
-             return true;
+        if(diff_x < -1.0 && diff_x > -20 && diff_y > -120 && diff_y < 20) return true;
+        else if(diff_x > -20  && diff_x < 120 && diff_y > -120 && diff_y < 20) return true;
         return false;
     }
 }

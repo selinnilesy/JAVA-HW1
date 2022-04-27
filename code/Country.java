@@ -21,9 +21,10 @@ public class Country extends Entity {
     public String name, label;
     private BufferedImage image = null;
     // this is a 2-way has-relationship between country and orders.
-    // even if the order is destructed later on, its country field's reference
-    // will be kept in Common and country object will not be destroyed prematurely.
+    // even if its orders and country references in orders are destructed later on, countries will still
+    // live statically in Common and country objects will not be destroyed prematurely.
     private List<Order> orders = null;
+    // static final (constant) to not to reinitialize and know the color in advance.
     private static final Color nameColor = new Color(0, 0, 0);
     private static final Color worthColor = new Color(0, 0, 255);
     private static final Color cashColor = new Color(0, 100, 0);
@@ -31,7 +32,9 @@ public class Country extends Entity {
     private static final Color happinessColor = new Color(180, 0, 0);
     private static final Font font = new Font("Verdana", Font.BOLD, 16);
 
-    // position countries in GUI based on initOrder
+    // position countries in GUI based on initOrder.
+    // i designed my GUI for all screen sizes,
+    // so, i positioned countries and corpos according to this width and height's proportions to the screen.
     public Country(String name, int initOrder, String label){
         super(Common.getWindowWidth()*initOrder/7,Common.getWindowHeight()*3/5);
         this.name=name;
@@ -73,7 +76,6 @@ public class Country extends Entity {
         for(Order x : this.orders){
             x.draw(g2d);
         }
-
     }
 
     public void removeOrder(Order x){
@@ -81,10 +83,9 @@ public class Country extends Entity {
     }
     @Override
     public void step() {
-
-        // if an order is already caught while stepping corporations, corporation state handle it
-        // and invoke this class to discard its position in the orders array.
-        // therefore, no need to double check here again.
+        // here i execute orders hit horizontal.
+        // if an order is already caught while stepping corporations, corporation state handles it
+        // and invoke this country object to discard it from the orders array.
         for (int i = 0; i < orders.size(); i++){
             Order x = orders.get(i);
             x.step();
